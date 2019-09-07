@@ -5,7 +5,7 @@
     </head>
     <body>
         <div>
-                <svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="2598" height="1862" viewBox="0 0 2598 1862" version="1.1" style="display: block;margin-left: auto;margin-right: auto;">
+                <svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="400" height="400" viewBox="0 0 1000 1000" version="1.1" style="display: block;margin-left: auto;margin-right: auto;">
                     <defs>
                     <style type="text/css">
                     
@@ -37,6 +37,11 @@
                       </symbol>
                       -->
                     </defs>
+                    <g id="example">
+                        <path class="stroke" d="m 10,58.5758 h 211.8747 c 4.0966,0 7.4486,-3.3516 7.4486,-7.4486 v -41.7957 c 0,-4.0969 -3.352,-7.4486 -7.4486,-7.4486 H 10 c -4.0967,0 -7.4484,3.3517 -7.4484,7.4486 v 41.7957 c 0,4.097 3.3517,7.4486 7.4484,7.4486 z"></path>
+                        <path class="stroke" d="m 218.5222,36.2564 c 3.1312,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5381,-5.6693 -5.6693,-5.6693 -3.1311,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5382,5.6693 5.6693,5.6693 z"></path>
+                        <path class="stroke" d="m 15.0083,36.2564 c 3.1311,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5382,-5.6693 -5.6693,-5.6693 -3.1312,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5381,5.6693 5.6693,5.6693 z"></path>
+                    </g>
                     <g id="target">
                         <!--
                         <use x="0" xlink:href="#cutout"></use>
@@ -50,6 +55,8 @@
                         -->
                     </g>
             </svg>
+
+            <button id="download">Ladda ner</button>
         </div>
 
         <script>
@@ -57,29 +64,114 @@
                 [ "För ände", "Holmvägen 42" ],
                 [ "För ände", "Holmvägen 24" ],
                 [ "För ände", "Holmvägen 43" ],
+                [ "För ände", "Holmvägen 42" ],
+                [ "För ände", "Holmvägen 24" ],
+                [ "För ände", "Holmvägen 43" ],
+                [ "För ände", "Holmvägen 42" ],
+                [ "För ände", "Holmvägen 24" ],
+                [ "För ände", "Holmvägen 43" ],
+                [ "För ände", "Holmvägen 42" ],
+                [ "För ände", "Holmvägen 24" ],
+                [ "För ände", "Holmvägen 43" ],
+                [ "För ände", "Holmvägen 42" ],
+                [ "För ände", "Holmvägen 24" ],
+                [ "För ände", "Holmvägen 43" ]
             ]
-            let offset = 0;
-            let count = 0;
+            
             const snap = Snap('#svg');
+
+            function centeredTextBox(rows) {
+                const lineHeight = 27;
+                const text = snap.text({ text: rows });
+                text.addClass('text');
+                text.attr('text-anchor', 'middle');
+
+                // break up on separate lines
+                text.selectAll('tspan').forEach(function(span, i) {
+                   span.attr({ y: i * lineHeight }) 
+                });
+
+                // then center in x, when nothing oveerlaps
+                const center = text.getBBox().width * 0.5;
+                text.selectAll('tspan').forEach(function(span, i) {
+                   span.attr({ x: center });
+                });
+                return text;
+            }
+
+            function centerText(container, text) {
+                const bbox = container.getBBox();
+                let textEl = centeredTextBox(text)
+                container.append(textEl);
+                const textBox = textEl.getBBox();
+                const center = {
+                    x: bbox.width * 0.5 - textBox.width * 0.5,
+                    y: bbox.height * 0.5 - textBox.height * 0.5
+                };
+                const offsetY = 19;
+                textEl.transform(`t${center.x},${center.y + offsetY}`)
+            }
+
+            function place(text, x, y) {
+                const box = Snap('#example').clone();
+                box.transform(`t${x},${y}`);
+                snap.append(box);
+                centerText(box, text)
+            }
+
+            place(['test', 'cocoa my man'], 0, 300);
+            place(['test'], 0, 360);
+
+            const maxColumns = 7;
+            
+            let row = 0;
+            let column = 1;
+            let offsetX = 0;
+            let offsetY = 0;
+            let count = 0;
             rows.forEach(function(row) {
+                if (column == maxColumns) {
+                    column = 0;
+                    offsetY = offsetY + 70;
+                    offsetX = 0;
+                }
                 count += 1;
-                const useElement = snap.use('cutout')
-                useElement.attr('x', offset);
-                snap.append(useElement);
-                const physical = $(useElement.node);
+                place(row, offsetX, offsetY)
+                // const useElement = snap.use('cutout')
+                // useElement.attr('x', offsetX);
+                // useElement.attr('y', offsetY);
+                // snap.append(useElement);
+
+                // const physical = $(useElement.node);
                 
-                const textHeight = 24;
-                let text = snap.text(offset + 50, textHeight, row[0])
-                text.addClass('text');
-                snap.append(text);
+                // const textHeight = 24 + offsetY;
+                // let text = snap.text(offsetX + 50, textHeight, row[0])
+                // text.addClass('text');
+                // snap.append(text);
 
-                text = snap.text(offset + 50, textHeight + 24, row[1])
-                text.addClass('text');
-                snap.append(text);
+                // text = snap.text(offsetX + 50, textHeight + 24, row[1])
+                // text.addClass('text');
+                // snap.append(text);
 
-                offset += 240;
+                offsetX += 240;
+                column += 1;
             })
+
+            function base64EncodeUnicode(str) {
+                // First we escape the string using encodeURIComponent to get the UTF-8 encoding of the characters, 
+                // then we convert the percent encodings into raw bytes, and finally feed it to btoa() function.
+                utf8Bytes = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+                        return String.fromCharCode('0x' + p1);
+                });
+
+                return btoa(utf8Bytes);
+            }
         
+            $('#download').click(function() {
+                const svg = $('#svg')[0];
+                const base64 = base64EncodeUnicode(svg.outerHTML);
+                window.open("data:application/svg;base64," + base64);
+            })
         </script>
     </body>
 </html>
