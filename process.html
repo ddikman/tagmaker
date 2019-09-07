@@ -1,0 +1,85 @@
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js"></script>
+    </head>
+    <body>
+        <div>
+                <svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="2598" height="1862" viewBox="0 0 2598 1862" version="1.1" style="display: block;margin-left: auto;margin-right: auto;">
+                    <defs>
+                    <style type="text/css">
+                    
+                    .stroke {
+                        fill:none;
+                        stroke:#373535;
+                        stroke-width:0.21600001;
+                        stroke-linecap:butt;
+                        stroke-linejoin:miter;
+                        stroke-miterlimit:2.61312604;
+                        stroke-dasharray:none;
+                        stroke-opacity:1
+                    }
+
+                    .text { font: bold 18px Arial; fill: #000000; }
+                </style>
+
+                    <symbol id="cutout">
+                        <path class="stroke" d="m 10,58.5758 h 211.8747 c 4.0966,0 7.4486,-3.3516 7.4486,-7.4486 v -41.7957 c 0,-4.0969 -3.352,-7.4486 -7.4486,-7.4486 H 10 c -4.0967,0 -7.4484,3.3517 -7.4484,7.4486 v 41.7957 c 0,4.097 3.3517,7.4486 7.4484,7.4486 z"></path>
+                        <path class="stroke" d="m 218.5222,36.2564 c 3.1312,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5381,-5.6693 -5.6693,-5.6693 -3.1311,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5382,5.6693 5.6693,5.6693 z"></path>
+                        <path class="stroke" d="m 15.0083,36.2564 c 3.1311,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5382,-5.6693 -5.6693,-5.6693 -3.1312,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5381,5.6693 5.6693,5.6693 z"></path>
+                      </symbol>
+
+                      <!--
+                          <symbol id="cutout">
+                        <path class="stroke" d="m 23.9715,1163.5758 h 211.8747 c 4.0966,0 7.4486,-3.3516 7.4486,-7.4486 v -41.7957 c 0,-4.0969 -3.352,-7.4486 -7.4486,-7.4486 H 23.9715 c -4.0967,0 -7.4484,3.3517 -7.4484,7.4486 v 41.7957 c 0,4.097 3.3517,7.4486 7.4484,7.4486 z"></path>
+                        <path class="stroke" d="m 231.5222,1141.2564 c 3.1312,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5381,-5.6693 -5.6693,-5.6693 -3.1311,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5382,5.6693 5.6693,5.6693 z"></path>
+                        <path class="stroke" d="m 28.0083,1141.2564 c 3.1311,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5382,-5.6693 -5.6693,-5.6693 -3.1312,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5381,5.6693 5.6693,5.6693 z"></path>
+                      </symbol>
+                      -->
+                    </defs>
+                    <g id="target">
+                        <!--
+                        <use x="0" xlink:href="#cutout"></use>
+                        <path class="stroke" d="m 23.9715,1163.5758 h 211.8747 c 4.0966,0 7.4486,-3.3516 7.4486,-7.4486 v -41.7957 c 0,-4.0969 -3.352,-7.4486 -7.4486,-7.4486 H 23.9715 c -4.0967,0 -7.4484,3.3517 -7.4484,7.4486 v 41.7957 c 0,4.097 3.3517,7.4486 7.4484,7.4486 z"></path>
+                        <path class="stroke" d="m 231.5222,1141.2564 c 3.1312,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5381,-5.6693 -5.6693,-5.6693 -3.1311,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5382,5.6693 5.6693,5.6693 z"></path>
+                        <path class="stroke" d="m 28.0083,1141.2564 c 3.1311,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5382,-5.6693 -5.6693,-5.6693 -3.1312,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5381,5.6693 5.6693,5.6693 z"></path>
+                        <text class="text" x="23" y="1163">
+                            <tspan x="23" y="1163">För ände</tspan>
+                            <tspan x="23" y="1183">Holmvägen 42</tspan>
+                        </text>
+                        -->
+                    </g>
+            </svg>
+        </div>
+
+        <script>
+            const rows = [
+                [ "För ände", "Holmvägen 42" ],
+                [ "För ände", "Holmvägen 24" ],
+                [ "För ände", "Holmvägen 43" ],
+            ]
+            let offset = 0;
+            let count = 0;
+            const snap = Snap('#svg');
+            rows.forEach(function(row) {
+                count += 1;
+                const useElement = snap.use('cutout')
+                useElement.attr('x', offset);
+                snap.append(useElement);
+                const physical = $(useElement.node);
+                
+                const textHeight = 24;
+                let text = snap.text(offset + 50, textHeight, row[0])
+                text.addClass('text');
+                snap.append(text);
+
+                text = snap.text(offset + 50, textHeight + 24, row[1])
+                text.addClass('text');
+                snap.append(text);
+
+                offset += 240;
+            })
+        
+        </script>
+    </body>
+</html>
