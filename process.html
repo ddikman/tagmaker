@@ -2,10 +2,49 @@
     <head>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
+        <link rel="style/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css"/>
+        <link rel="style/css" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/basic.min.css"/>
+
+        <style>
+        .dropzone {
+  border: 2px dashed #0087F7;
+  border-radius: 5px;
+  background: white; }
+  
+    .dropzone .dz-message .note {
+      font-size: 0.8em;
+      font-weight: 200;
+      display: block;
+      margin-top: 1.4rem; }
+      .dropzone.dz-clickable {
+    cursor: pointer;
+}
+
+.dropzone.dz-clickable .dz-message, .dropzone.dz-clickable .dz-message * {
+    cursor: pointer;
+}
+
+.dropzone .dz-message {
+    font-weight: 400;
+}
+.dropzone .dz-message {
+    text-align: center;
+    margin: 2em 0;
+}
+      </style>
     </head>
     <body>
-        <div>
-                <svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="400" height="400" viewBox="0 0 1000 1000" version="1.1" style="display: block;margin-left: auto;margin-right: auto;">
+            <div id="dropzone"><form action="/upload" class="dropzone needsclick dz-clickable" id="demo-upload">
+
+                <div class="dz-message needsclick">
+                  Drop files here or click to upload.<br>
+                  <span class="note needsclick">(This is just a demo dropzone. Selected files are <strong>not</strong> actually uploaded.)</span>
+                </div>
+              
+              </form></div>
+              </form>
+                <svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="1400" height="400" viewBox="0 0 1400 1000" version="1.1">
                     <defs>
                     <style type="text/css">
                     
@@ -22,41 +61,15 @@
 
                     .text { font: bold 18px Arial; fill: #000000; }
                 </style>
-
-                    <symbol id="cutout">
-                        <path class="stroke" d="m 10,58.5758 h 211.8747 c 4.0966,0 7.4486,-3.3516 7.4486,-7.4486 v -41.7957 c 0,-4.0969 -3.352,-7.4486 -7.4486,-7.4486 H 10 c -4.0967,0 -7.4484,3.3517 -7.4484,7.4486 v 41.7957 c 0,4.097 3.3517,7.4486 7.4484,7.4486 z"></path>
-                        <path class="stroke" d="m 218.5222,36.2564 c 3.1312,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5381,-5.6693 -5.6693,-5.6693 -3.1311,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5382,5.6693 5.6693,5.6693 z"></path>
-                        <path class="stroke" d="m 15.0083,36.2564 c 3.1311,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5382,-5.6693 -5.6693,-5.6693 -3.1312,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5381,5.6693 5.6693,5.6693 z"></path>
-                      </symbol>
-
-                      <!--
-                          <symbol id="cutout">
-                        <path class="stroke" d="m 23.9715,1163.5758 h 211.8747 c 4.0966,0 7.4486,-3.3516 7.4486,-7.4486 v -41.7957 c 0,-4.0969 -3.352,-7.4486 -7.4486,-7.4486 H 23.9715 c -4.0967,0 -7.4484,3.3517 -7.4484,7.4486 v 41.7957 c 0,4.097 3.3517,7.4486 7.4484,7.4486 z"></path>
-                        <path class="stroke" d="m 231.5222,1141.2564 c 3.1312,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5381,-5.6693 -5.6693,-5.6693 -3.1311,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5382,5.6693 5.6693,5.6693 z"></path>
-                        <path class="stroke" d="m 28.0083,1141.2564 c 3.1311,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5382,-5.6693 -5.6693,-5.6693 -3.1312,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5381,5.6693 5.6693,5.6693 z"></path>
-                      </symbol>
-                      -->
                     </defs>
                     <g id="example">
                         <path class="stroke" d="m 10,58.5758 h 211.8747 c 4.0966,0 7.4486,-3.3516 7.4486,-7.4486 v -41.7957 c 0,-4.0969 -3.352,-7.4486 -7.4486,-7.4486 H 10 c -4.0967,0 -7.4484,3.3517 -7.4484,7.4486 v 41.7957 c 0,4.097 3.3517,7.4486 7.4484,7.4486 z"></path>
                         <path class="stroke" d="m 218.5222,36.2564 c 3.1312,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5381,-5.6693 -5.6693,-5.6693 -3.1311,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5382,5.6693 5.6693,5.6693 z"></path>
                         <path class="stroke" d="m 15.0083,36.2564 c 3.1311,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5382,-5.6693 -5.6693,-5.6693 -3.1312,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5381,5.6693 5.6693,5.6693 z"></path>
                     </g>
-                    <g id="target">
-                        <!--
-                        <use x="0" xlink:href="#cutout"></use>
-                        <path class="stroke" d="m 23.9715,1163.5758 h 211.8747 c 4.0966,0 7.4486,-3.3516 7.4486,-7.4486 v -41.7957 c 0,-4.0969 -3.352,-7.4486 -7.4486,-7.4486 H 23.9715 c -4.0967,0 -7.4484,3.3517 -7.4484,7.4486 v 41.7957 c 0,4.097 3.3517,7.4486 7.4484,7.4486 z"></path>
-                        <path class="stroke" d="m 231.5222,1141.2564 c 3.1312,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5381,-5.6693 -5.6693,-5.6693 -3.1311,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5382,5.6693 5.6693,5.6693 z"></path>
-                        <path class="stroke" d="m 28.0083,1141.2564 c 3.1311,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5382,-5.6693 -5.6693,-5.6693 -3.1312,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5381,5.6693 5.6693,5.6693 z"></path>
-                        <text class="text" x="23" y="1163">
-                            <tspan x="23" y="1163">För ände</tspan>
-                            <tspan x="23" y="1183">Holmvägen 42</tspan>
-                        </text>
-                        -->
-                    </g>
             </svg>
 
-            <button id="download">Ladda ner</button>
+            <a id="download-link">download link</a>
         </div>
 
         <script>
@@ -75,7 +88,9 @@
                 [ "För ände", "Holmvägen 43" ],
                 [ "För ände", "Holmvägen 42" ],
                 [ "För ände", "Holmvägen 24" ],
-                [ "För ände", "Holmvägen 43" ]
+                [ "För ände", "Holmvägen 43" ],
+                [ "Text", "Cocoa my man" ],
+                [ "Mjälby", "Sundborn" ]
             ]
             
             const snap = Snap('#svg');
@@ -105,7 +120,7 @@
                 container.append(textEl);
                 const textBox = textEl.getBBox();
                 const center = {
-                    x: bbox.width * 0.5 - textBox.width * 0.5,
+                    x: bbox.width * 0.5 - textBox.width * 0.5 - textBox.x,
                     y: bbox.height * 0.5 - textBox.height * 0.5
                 };
                 const offsetY = 19;
@@ -119,13 +134,10 @@
                 centerText(box, text)
             }
 
-            place(['test', 'cocoa my man'], 0, 300);
-            place(['test'], 0, 360);
-
             const maxColumns = 7;
             
             let row = 0;
-            let column = 1;
+            let column = 0;
             let offsetX = 0;
             let offsetY = 0;
             let count = 0;
@@ -135,7 +147,6 @@
                     offsetY = offsetY + 70;
                     offsetX = 0;
                 }
-                count += 1;
                 place(row, offsetX, offsetY)
                 // const useElement = snap.use('cutout')
                 // useElement.attr('x', offsetX);
@@ -157,6 +168,17 @@
                 column += 1;
             })
 
+            // remove the original one
+            Snap('#example').remove()
+
+            // scale back
+            const totalBox = snap.getBBox();
+            snap.attr({
+                width: '100%',
+                height: '100%',
+                viewBox: `0 0 ${totalBox.width + 10} ${totalBox.height}`
+            })
+
             function base64EncodeUnicode(str) {
                 // First we escape the string using encodeURIComponent to get the UTF-8 encoding of the characters, 
                 // then we convert the percent encodings into raw bytes, and finally feed it to btoa() function.
@@ -167,11 +189,19 @@
                 return btoa(utf8Bytes);
             }
         
-            $('#download').click(function() {
-                const svg = $('#svg')[0];
-                const base64 = base64EncodeUnicode(svg.outerHTML);
-                window.open("data:application/svg;base64," + base64);
-            })
+            const svg = $('#svg')[0];
+            const base64 = base64EncodeUnicode(svg.outerHTML);
+            $('#download-link').attr('href', "data:application/svg;base64," + base64);
+            $('#download-link').attr('download', 'template.svg');
+
+            Dropzone.options.dropzone = {
+                paramName: 'csv',
+                maxFilesize: 1,
+                accept: function(file, done) {
+                    console.log(file.name);
+                    done();
+                }
+            }
         </script>
     </body>
 </html>
