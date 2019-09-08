@@ -1,0 +1,186 @@
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js"></script>
+        <link rel="stylesheet" href="./tagmaker.css" />
+    </head>
+    <body>
+            <div>
+                    <input type="file" id="files" name="file" />
+            </div>
+              </form>
+                <svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="1400" height="400" viewBox="0 0 1400 1000" version="1.1">
+                    <defs>
+                    <style type="text/css">
+                    
+                    .stroke {
+                        fill:none;
+                        stroke:#373535;
+                        stroke-width:0.21600001;
+                        stroke-linecap:butt;
+                        stroke-linejoin:miter;
+                        stroke-miterlimit:2.61312604;
+                        stroke-dasharray:none;
+                        stroke-opacity:1
+                    }
+
+                    .text { font: bold 18px Arial; fill: #000000; }
+                </style>
+                    </defs>
+                    <g id="example">
+                        <path class="stroke" d="m 10,58.5758 h 211.8747 c 4.0966,0 7.4486,-3.3516 7.4486,-7.4486 v -41.7957 c 0,-4.0969 -3.352,-7.4486 -7.4486,-7.4486 H 10 c -4.0967,0 -7.4484,3.3517 -7.4484,7.4486 v 41.7957 c 0,4.097 3.3517,7.4486 7.4484,7.4486 z"></path>
+                        <path class="stroke" d="m 218.5222,36.2564 c 3.1312,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5381,-5.6693 -5.6693,-5.6693 -3.1311,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5382,5.6693 5.6693,5.6693 z"></path>
+                        <path class="stroke" d="m 15.0083,36.2564 c 3.1311,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5382,-5.6693 -5.6693,-5.6693 -3.1312,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5381,5.6693 5.6693,5.6693 z"></path>
+                    </g>
+            </svg>
+
+            <a id="download-link">download link</a>
+        </div>
+
+        <script>
+            const data = [
+                [ "För ände", "Holmvägen 42" ],
+                [ "För ände", "Holmvägen 24" ],
+                [ "För ände", "Holmvägen 43" ],
+                [ "För ände", "Holmvägen 42" ],
+                [ "För ände", "Holmvägen 24" ],
+                [ "För ände", "Holmvägen 43" ],
+                [ "För ände", "Holmvägen 42" ],
+                [ "För ände", "Holmvägen 24" ],
+                [ "För ände", "Holmvägen 43" ],
+                [ "För ände", "Holmvägen 42" ],
+                [ "För ände", "Holmvägen 24" ],
+                [ "För ände", "Holmvägen 43" ],
+                [ "För ände", "Holmvägen 42" ],
+                [ "För ände", "Holmvägen 24" ],
+                [ "För ände", "Holmvägen 43" ],
+                [ "Text", "Cocoa my man" ],
+                [ "Mjälby", "Sundborn" ]
+            ]
+
+            const snap = Snap('#svg'); 
+
+            function generateSvg(rows) {
+                const maxColumns = 7;
+                
+                let row = 0;
+                let column = 0;
+                let offsetX = 0;
+                let offsetY = 0;
+                let count = 0;
+                rows.forEach(function(row) {
+                    if (column == maxColumns) {
+                        column = 0;
+                        offsetY = offsetY + 70;
+                        offsetX = 0;
+                    }
+                    place(row, offsetX, offsetY)
+
+                    offsetX += 240;
+                    column += 1;
+                })
+
+                // remove the original one
+                Snap('#example').remove()
+
+                // scale back
+                const totalBox = snap.getBBox();
+                snap.attr({
+                    width: '100%',
+                    height: '100%',
+                    viewBox: `0 0 ${totalBox.width + 10} ${totalBox.height}`
+                })
+
+                const svg = $('#svg')[0];
+                const base64 = base64EncodeUnicode(svg.outerHTML);
+                $('#download-link').attr('href', "data:application/svg;base64," + base64);
+                $('#download-link').attr('download', 'template.svg');
+            }
+
+            //generateSvg(data);
+
+            function centeredTextBox(rows) {
+                const lineHeight = 27;
+                const text = snap.text({ text: rows });
+                text.addClass('text');
+                text.attr('text-anchor', 'middle');
+
+                // break up on separate lines
+                text.selectAll('tspan').forEach(function(span, i) {
+                   span.attr({ y: i * lineHeight }) 
+                });
+
+                // then center in x, when nothing oveerlaps
+                const center = text.getBBox().width * 0.5;
+                text.selectAll('tspan').forEach(function(span, i) {
+                   span.attr({ x: center });
+                });
+                return text;
+            }
+
+            function centerText(container, text) {
+                const bbox = container.getBBox();
+                let textEl = centeredTextBox(text)
+                container.append(textEl);
+                const textBox = textEl.getBBox();
+                const center = {
+                    x: bbox.width * 0.5 - textBox.width * 0.5 - textBox.x,
+                    y: bbox.height * 0.5 - textBox.height * 0.5
+                };
+                const offsetY = 19;
+                textEl.transform(`t${center.x},${center.y + offsetY}`)
+            }
+
+            function place(text, x, y) {
+                const box = Snap('#example').clone();
+                box.transform(`t${x},${y}`);
+                snap.append(box);
+                centerText(box, text)
+            }
+
+            function base64EncodeUnicode(str) {
+                // First we escape the string using encodeURIComponent to get the UTF-8 encoding of the characters, 
+                // then we convert the percent encodings into raw bytes, and finally feed it to btoa() function.
+                utf8Bytes = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+                        return String.fromCharCode('0x' + p1);
+                });
+
+                return btoa(utf8Bytes);
+            }
+        </script>
+
+        <script>
+
+    function readData(file, callback) {
+    var reader = new FileReader();
+
+      // Closure to capture the file information.
+      reader.onload = function(e) {
+          callback(reader.result);
+      }
+
+      // Read in the image file as a data URL.
+      reader.readAsText(file);
+    }
+
+    function handleFileSelect(evt) {
+        var files = evt.target.files; // FileList object
+
+    // Loop through the FileList and render image files as thumbnails.
+    for (var i = 0, f; f = files[i]; i++) {
+
+        if (f.name.endsWith('csv')) {
+            console.log('reading file')
+            readData(f, function(data) {
+                // console.log(data);
+                rows = data.split('\n').map(function(row) { return row.split(',')});
+                generateSvg(rows);
+            })
+        }
+    }
+  }
+
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+  </script>
+    </body>
+</html>
