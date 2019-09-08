@@ -9,10 +9,15 @@
     </head>
     <body>
             <div id="file-input">
-                <label for="file" data-translate="upload-hint">Drop a file here or press to upload.</label>
-                <input type="file" id="files" name="file" />
+                <div>
+                        <label data-translate="upload-hint">Drop a file here or press to upload.</label>
+                </div>
+                <div style="margin-top: 20px">
+                    <label for="files" class="button -green" data-translate="choose-file">Choose file</label>
+                    <input type="file" id="files" name="file" />
+                </div>
             </div>
-              </form>
+              <div id="output">
                 <svg style="display: none;" id="svg" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1400 1000" version="1.1">
                     <defs>
                     <style type="text/css">
@@ -37,9 +42,16 @@
                         <path class="stroke" d="m 15.0083,36.2564 c 3.1311,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5382,-5.6693 -5.6693,-5.6693 -3.1312,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5381,5.6693 5.6693,5.6693 z"></path>
                     </g>
             </svg>
+        </div>
 
-            <a class="button -green" style="display: none;" id="download-link">download link</a>
-            <a class="button -blue" style="display: none" href="#" id="try-again" data-translate="try-again">Try again</a>
+        <div id="done-buttons" style="display: none;">
+            <a class="button -green" id="download-link" data-translate='download-svg'>Download SVG</a>
+            <a class="button -blue" href="#" id="try-again" data-translate="try-again">Try again</a>
+        </div>
+
+        <div id="created-by">
+            <span data-translate="created-by">Tool is created by</span><span> David Dikman, </span><a href="https://greycastle.se">https://greycastle.se</a>
+        </div>
         </div>
 
         <script>
@@ -177,8 +189,7 @@
                 // console.log(data);
                 rows = data.split('\n').map(function(row) { return row.split(',')});
                 generateSvg(rows);
-                $('#download-link').show();
-                $('#try-again').show();
+                $('#done-buttons').show();
                 $('#file-input').hide();
             })
         }
