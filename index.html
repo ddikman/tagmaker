@@ -2,17 +2,18 @@
     <head>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js"></script>
-        <script src="./localizations.js"></script>
         <link rel="stylesheet" href="./tagmaker.css" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <script src="./localizations.js"></script>
     </head>
     <body>
             <div>
-                    <input type="file" id="files" name="file" />
+                <label for="file" data-translate="upload-hint">Drop a file here or press to upload.</label>
+                <input type="file" id="files" name="file" />
             </div>
               </form>
-                <svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="1400" height="400" viewBox="0 0 1400 1000" version="1.1">
+                <svg style="display: none;" id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" width="1400" height="400" viewBox="0 0 1400 1000" version="1.1">
                     <defs>
                     <style type="text/css">
                     
@@ -37,7 +38,7 @@
                     </g>
             </svg>
 
-            <a id="download-link">download link</a>
+            <a style="display: none;" id="download-link">download link</a>
         </div>
 
         <script>
@@ -99,8 +100,6 @@
                 $('#download-link').attr('href', "data:application/svg;base64," + base64);
                 $('#download-link').attr('download', 'template.svg');
             }
-
-            //generateSvg(data);
 
             function centeredTextBox(rows) {
                 const lineHeight = 27;
