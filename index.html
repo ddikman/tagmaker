@@ -8,7 +8,7 @@
         <script src="./localizations.js"></script>
     </head>
     <body>
-            <div>
+            <div id="file-input">
                 <label for="file" data-translate="upload-hint">Drop a file here or press to upload.</label>
                 <input type="file" id="files" name="file" />
             </div>
@@ -39,6 +39,7 @@
             </svg>
 
             <a style="display: none;" id="download-link">download link</a>
+            <a style="display: none" href="#" id="try-again" data-translate="try-again">Try again</a>
         </div>
 
         <script>
@@ -65,6 +66,7 @@
             const snap = Snap('#svg'); 
 
             function generateSvg(rows) {
+                $('#svg').show();
                 const maxColumns = 7;
                 
                 let row = 0;
@@ -177,10 +179,17 @@
                 // console.log(data);
                 rows = data.split('\n').map(function(row) { return row.split(',')});
                 generateSvg(rows);
+                $('#download-link').show();
+                $('#restart').show();
+                $('#file-input').hide();
             })
         }
     }
   }
+
+  $('#try-again').click(function() {
+    window.location.reload();
+  });
 
   document.getElementById('files').addEventListener('change', handleFileSelect, false);
   </script>
