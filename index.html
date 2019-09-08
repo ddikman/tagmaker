@@ -13,7 +13,7 @@
                 <input type="file" id="files" name="file" />
             </div>
               </form>
-                <svg style="display: none;" id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1400" height="1000" viewBox="0 0 1400 1000" version="1.1">
+                <svg style="display: none;" id="svg" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1400 1000" version="1.1">
                     <defs>
                     <style type="text/css">
                     
@@ -92,9 +92,7 @@
                 // scale back
                 const totalBox = snap.getBBox();
                 snap.attr({
-                    width: '400px',
-                    height: '400px',
-                    viewBox: `0 0 ${totalBox.width + 10} ${totalBox.height}`
+                    viewBox: `0 0 ${totalBox.width + 10} ${totalBox.height + 10}`
                 })
 
                 const svg = $('#svg')[0];
