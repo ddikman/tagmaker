@@ -19,23 +19,26 @@
             </div>
               <div id="output">
                 <svg style="display: none;" id="svg" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1400 1000" version="1.1">
-                    <defs>
-                    <style type="text/css">
-                    
-                    .stroke {
-                        fill:none;
-                        stroke:#373535;
-                        stroke-width:0.21600001;
-                        stroke-linecap:butt;
-                        stroke-linejoin:miter;
-                        stroke-miterlimit:2.61312604;
-                        stroke-dasharray:none;
-                        stroke-opacity:1
-                    }
-
-                    .text { font: bold 18px Arial; fill: #000000; }
-                </style>
-                    </defs>
+                    <style type="text/css"><![CDATA[
+                            .stroke {
+                                fill:none;
+                                stroke:#373535;
+                                stroke-width:0.21600001;
+                                stroke-linecap:butt;
+                                stroke-linejoin:miter;
+                                stroke-miterlimit:2.61312604;
+                                stroke-dasharray:none;
+                                stroke-opacity:1
+                            }
+        
+                            .text { 
+                                font-weight: bold;
+                                font-size: 12pt;
+                                font-family: Arial; 
+                                fill: #000000; 
+                            }
+                            ]]>
+                        </style>
                     <g id="example">
                         <path class="stroke" d="m 10,58.5758 h 211.8747 c 4.0966,0 7.4486,-3.3516 7.4486,-7.4486 v -41.7957 c 0,-4.0969 -3.352,-7.4486 -7.4486,-7.4486 H 10 c -4.0967,0 -7.4484,3.3517 -7.4484,7.4486 v 41.7957 c 0,4.097 3.3517,7.4486 7.4484,7.4486 z"></path>
                         <path class="stroke" d="m 218.5222,36.2564 c 3.1312,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5381,-5.6693 -5.6693,-5.6693 -3.1311,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5382,5.6693 5.6693,5.6693 z"></path>
@@ -55,26 +58,6 @@
         </div>
 
         <script>
-            const data = [
-                [ "För ände", "Holmvägen 42" ],
-                [ "För ände", "Holmvägen 24" ],
-                [ "För ände", "Holmvägen 43" ],
-                [ "För ände", "Holmvägen 42" ],
-                [ "För ände", "Holmvägen 24" ],
-                [ "För ände", "Holmvägen 43" ],
-                [ "För ände", "Holmvägen 42" ],
-                [ "För ände", "Holmvägen 24" ],
-                [ "För ände", "Holmvägen 43" ],
-                [ "För ände", "Holmvägen 42" ],
-                [ "För ände", "Holmvägen 24" ],
-                [ "För ände", "Holmvägen 43" ],
-                [ "För ände", "Holmvägen 42" ],
-                [ "För ände", "Holmvägen 24" ],
-                [ "För ände", "Holmvägen 43" ],
-                [ "Text", "Cocoa my man" ],
-                [ "Mjälby", "Sundborn" ]
-            ]
-
             const snap = Snap('#svg'); 
 
             function generateSvg(rows) {
@@ -113,36 +96,47 @@
                 $('#download-link').attr('download', 'template.svg');
             }
 
-            function centeredTextBox(rows) {
-                const lineHeight = 27;
-                const text = snap.text({ text: rows });
-                text.addClass('text');
-                text.attr('text-anchor', 'middle');
+            function centeredTextBox(container, rows) {
+                const lineHeight = 25;
+                const offsetY = 23;
+                rows.forEach(function(line, index) {
+                    const text = snap.text(30, 0, line);
+                    text.addClass('text');
+                    container.append(text);
+                    text.attr({
+                        // x: 0,
+                        'font-weight': 'bold',
+                        'font-size': '9pt',
+                        y: offsetY + lineHeight * index
+                    });
+                });
+                
+                //text.attr('text-anchor', 'middle');
 
                 // break up on separate lines
-                text.selectAll('tspan').forEach(function(span, i) {
-                   span.attr({ y: i * lineHeight }) 
-                });
+                // text.selectAll('tspan').forEach(function(span, i) {
+                //    span.attr({ y: i * lineHeight + offsetY }) 
+                // });
 
-                // then center in x, when nothing oveerlaps
-                const center = text.getBBox().width * 0.5;
-                text.selectAll('tspan').forEach(function(span, i) {
-                   span.attr({ x: center });
-                });
-                return text;
+                // // then center in x, when nothing oveerlaps
+                // const center = text.getBBox().width * 0.5;
+                // text.selectAll('tspan').forEach(function(span, i) {
+                //    span.attr({ x: center - span.getBBox().width * 0.5 });
+                // });
+                // return text;
             }
 
             function centerText(container, text) {
                 const bbox = container.getBBox();
-                let textEl = centeredTextBox(text)
-                container.append(textEl);
-                const textBox = textEl.getBBox();
-                const center = {
-                    x: bbox.width * 0.5 - textBox.width * 0.5 - textBox.x,
-                    y: bbox.height * 0.5 - textBox.height * 0.5
-                };
-                const offsetY = 19;
-                textEl.transform(`t${center.x},${center.y + offsetY}`)
+                centeredTextBox(container, text)
+                // container.append(textEl);
+                // const textBox = textEl.getBBox();
+                // const center = {
+                //     x: bbox.width * 0.5 - textBox.width * 0.5 - textBox.x,
+                //     y: bbox.height * 0.5 - textBox.height * 0.5
+                // };
+                // const offsetY = 19;
+                //textEl.transform(`t${center.x},${center.y + offsetY}`)
             }
 
             function place(text, x, y) {
