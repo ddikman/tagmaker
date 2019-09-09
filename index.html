@@ -102,7 +102,7 @@
                 const offsetY = 23;
                 rows.forEach(function(line, index) {
                     const middle = container.getBBox().width * 0.5;
-                    const text = snap.text(middle, 0, line);
+                    const text = snap.text(middle, 0, line.trim());
                     text.addClass('text');
                     container.append(text);
                     text.attr({
@@ -149,7 +149,7 @@
       }
 
       // Read in the image file as a data URL.
-      reader.readAsText(file);
+      reader.readAsText(file, 'iso-8859-1');
     }
 
     function handleFileSelect(evt) {
@@ -162,7 +162,7 @@
             console.log('reading file')
             readData(f, function(data) {
                 // console.log(data);
-                rows = data.split('\n').map(function(row) { return row.split(',')});
+                rows = data.split('\n').map(function(row) { return row.split(';') });
                 generateSvg(rows);
                 $('#done-buttons').show();
                 $('#file-input').hide();
