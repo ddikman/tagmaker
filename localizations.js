@@ -5,7 +5,6 @@ const locale = {
         'download-example': 'Ladda ner exempelfil',
         'upload-hint': 'Tryck här för att ladda upp data fil',
         'try-again': "Prova igen",
-        'created-by': "Verktyget är skapat av",
         'choose-file': 'Välj fil'
     },
 }
@@ -27,7 +26,6 @@ $(document).ready(function() {
             item = $(item);
             const term = item.attr('data-translate');
             const translation = currentLocale()[term];
-            console.log(`setting translation for term ${term} to: ${translation}`);
             item.text(translation);
         });
     }
