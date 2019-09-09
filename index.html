@@ -33,13 +33,6 @@
                                 stroke-dasharray:none;
                                 stroke-opacity:1
                             }
-        
-                            .text { 
-                                font-weight: bold;
-                                font-size: 12pt;
-                                font-family: Arial; 
-                                fill: #000000; 
-                            }
                         </style>
                     <g id="example">
                         <path class="stroke" stroke-width="0.21600001" stroke="#373535" fill="none" d="m 10,58.5758 h 211.8747 c 4.0966,0 7.4486,-3.3516 7.4486,-7.4486 v -41.7957 c 0,-4.0969 -3.352,-7.4486 -7.4486,-7.4486 H 10 c -4.0967,0 -7.4484,3.3517 -7.4484,7.4486 v 41.7957 c 0,4.097 3.3517,7.4486 7.4484,7.4486 z"></path>
@@ -120,39 +113,23 @@
                     text.addClass('text');
                     container.append(text);
                     text.attr({
-                        // x: 0,
+                        'font-family': 'Arial',
                         'font-weight': 'bold',
-                        'font-size': '9pt',
+                        'font-size': '12pt',
                         y: offsetY + lineHeight * index
                     });
+
+                    const width = text.getBBox().width;
+                    const parentWidth = container.getBBox().width;
+                    text.attr({
+                        x: parentWidth * 0.5 - width * 0.5 + 10
+                    });
                 });
-                
-                //text.attr('text-anchor', 'middle');
-
-                // break up on separate lines
-                // text.selectAll('tspan').forEach(function(span, i) {
-                //    span.attr({ y: i * lineHeight + offsetY }) 
-                // });
-
-                // // then center in x, when nothing oveerlaps
-                // const center = text.getBBox().width * 0.5;
-                // text.selectAll('tspan').forEach(function(span, i) {
-                //    span.attr({ x: center - span.getBBox().width * 0.5 });
-                // });
-                // return text;
             }
 
             function centerText(container, text) {
                 const bbox = container.getBBox();
                 centeredTextBox(container, text)
-                // container.append(textEl);
-                // const textBox = textEl.getBBox();
-                // const center = {
-                //     x: bbox.width * 0.5 - textBox.width * 0.5 - textBox.x,
-                //     y: bbox.height * 0.5 - textBox.height * 0.5
-                // };
-                // const offsetY = 19;
-                //textEl.transform(`t${center.x},${center.y + offsetY}`)
             }
 
             function place(text, x, y) {
