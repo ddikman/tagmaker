@@ -2,7 +2,8 @@ const locale = {
     'sv': {
         'download-svg': 'Ladda ner SVG',
         'download-pdf': 'Ladda ner PDF',
-        'upload-hint': 'Släpp en fil här eller tryck för att ladda upp',
+        'download-example': 'Ladda ner exempelfil',
+        'upload-hint': 'Tryck här för att ladda upp data fil',
         'try-again': "Prova igen",
         'created-by': "Verktyget är skapat av",
         'choose-file': 'Välj fil'
