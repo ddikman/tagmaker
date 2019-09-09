@@ -25,9 +25,9 @@
               <div id="output" style="display: none;">
                 <svg id="svg" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1400 1000" version="1.1">
                     <g id="example">
-                        <path class="stroke" stroke-width="0.21600001" stroke="#373535" fill="none" d="m 10,58.5758 h 211.8747 c 4.0966,0 7.4486,-3.3516 7.4486,-7.4486 v -41.7957 c 0,-4.0969 -3.352,-7.4486 -7.4486,-7.4486 H 10 c -4.0967,0 -7.4484,3.3517 -7.4484,7.4486 v 41.7957 c 0,4.097 3.3517,7.4486 7.4484,7.4486 z"></path>
-                        <path class="stroke" stroke-width="0.21600001" stroke="#373535" fill="none" d="m 218.5222,36.2564 c 3.1312,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5381,-5.6693 -5.6693,-5.6693 -3.1311,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5382,5.6693 5.6693,5.6693 z"></path>
-                        <path class="stroke" stroke-width="0.21600001" stroke="#373535" fill="none" d="m 15.0083,36.2564 c 3.1311,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5382,-5.6693 -5.6693,-5.6693 -3.1312,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5381,5.6693 5.6693,5.6693 z"></path>
+                        <path stroke-width="0.02" stroke="#373535" fill="none" d="m 10,58.5758 h 211.8747 c 4.0966,0 7.4486,-3.3516 7.4486,-7.4486 v -41.7957 c 0,-4.0969 -3.352,-7.4486 -7.4486,-7.4486 H 10 c -4.0967,0 -7.4484,3.3517 -7.4484,7.4486 v 41.7957 c 0,4.097 3.3517,7.4486 7.4484,7.4486 z"></path>
+                        <path stroke-width="0.02" stroke="#373535" fill="none" d="m 218.5222,36.2564 c 3.1312,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5381,-5.6693 -5.6693,-5.6693 -3.1311,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5382,5.6693 5.6693,5.6693 z"></path>
+                        <path stroke-width="0.02" stroke="#373535" fill="none" d="m 15.0083,36.2564 c 3.1311,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5382,-5.6693 -5.6693,-5.6693 -3.1312,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5381,5.6693 5.6693,5.6693 z"></path>
                     </g>
             </svg>
         </div>
@@ -82,14 +82,16 @@
                 $('#download-svg-link').attr('href', "data:application/svg;base64," + base64);
                 $('#download-svg-link').attr('download', 'template.svg');
 
-                const pdf = new jsPDF();
+                const pdf = new jsPDF({
+                    orientation: 'landscape'
+                });
                 pdf.addFont('Arial.ttf', 'Arial', 'Normal')
 
                 // render the svg element
                 svg2pdf(document.getElementById('svg'), pdf, {
                     xOffset: 50,
                     yOffset: 50,
-                    scale: 1
+                    scale: 2.0
                 });
 
                 // get the data URI
