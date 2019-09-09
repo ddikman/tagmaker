@@ -2,6 +2,8 @@
 
 Tagmaker generates an SVG file with tags for printing based on an input csv.
 
+![intereface example](https://raw.githubusercontent.com/ddikman/tagmaker/master/example.gif)
+
 ## usage
 
 Open a web page and upload a file like the `test.csv`. An SVG will be generated, press the button to download. 
