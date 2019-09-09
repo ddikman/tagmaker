@@ -2,6 +2,9 @@
     <head>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+        <script src="./jspdf.min.js"></script>
+        <script src="./svg2pdf.min.js"></script>
         <link rel="stylesheet" href="./tagmaker.css" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -17,9 +20,9 @@
                     <input type="file" id="files" name="file" />
                 </div>
             </div>
-              <div id="output">
-                <svg style="display: none;" id="svg" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1400 1000" version="1.1">
-                    <style type="text/css"><![CDATA[
+              <div id="output" style="display: none;">
+                <svg id="svg" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1400 1000" version="1.1">
+                    <style type="text/css">
                             .stroke {
                                 fill:none;
                                 stroke:#373535;
@@ -37,7 +40,6 @@
                                 font-family: Arial; 
                                 fill: #000000; 
                             }
-                            ]]>
                         </style>
                     <g id="example">
                         <path class="stroke" d="m 10,58.5758 h 211.8747 c 4.0966,0 7.4486,-3.3516 7.4486,-7.4486 v -41.7957 c 0,-4.0969 -3.352,-7.4486 -7.4486,-7.4486 H 10 c -4.0967,0 -7.4484,3.3517 -7.4484,7.4486 v 41.7957 c 0,4.097 3.3517,7.4486 7.4484,7.4486 z"></path>
@@ -48,7 +50,8 @@
         </div>
 
         <div id="done-buttons" style="display: none;">
-            <a class="button -green" id="download-link" data-translate='download-svg'>Download SVG</a>
+            <a class="button -green" id="download-svg-link" data-translate='download-svg'>Download SVG</a>
+            <a class="button -green" id="download-pdf-link" data-translate='download-pdf'>Download PDF</a>
             <a class="button -blue" href="#" id="try-again" data-translate="try-again">Try again</a>
         </div>
 
@@ -61,7 +64,7 @@
             const snap = Snap('#svg'); 
 
             function generateSvg(rows) {
-                $('#svg').show();
+                $('#output').show();
                 const maxColumns = 7;
                 
                 let row = 0;
@@ -92,8 +95,21 @@
 
                 const svg = $('#svg')[0];
                 const base64 = base64EncodeUnicode(svg.outerHTML);
-                $('#download-link').attr('href', "data:application/svg;base64," + base64);
-                $('#download-link').attr('download', 'template.svg');
+                $('#download-svg-link').attr('href', "data:application/svg;base64," + base64);
+                $('#download-svg-link').attr('download', 'template.svg');
+
+                const pdf = new jsPDF('l', 'pt', [totalBox.width + 10, totalBox.height + 10]);
+
+                // render the svg element
+                svg2pdf(document.getElementById('svg'), pdf, {
+                    xOffset: 0,
+                    yOffset: 0,
+                    scale: 1
+                });
+
+                // get the data URI
+                $('#download-pdf-link').attr('href', pdf.output('datauristring'));
+                $('#download-pdf-link').attr('download', 'template.pdf');
             }
 
             function centeredTextBox(container, rows) {

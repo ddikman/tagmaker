@@ -16,3 +16,9 @@ http-server
 ```
 
 Then simply navigate to [http://127.0.0.1:8080/](http://127.0.0.1:8080/);
+
+## corel draw
+
+This tool was written to generate tag templates for import to CorelDraw and later use in a laser cutter. Alas, [CorelDraw seem to be famous for not handling SVGs correctly](https://productgraph.io/blogs/news/opening-svg-files-in-coreldraw).
+
+Because of this I'm generating a PDF using [svg2pdf](https://github.com/yWorks/svg2pdf.js/tree/master) library.
