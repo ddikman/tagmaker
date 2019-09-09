@@ -83,7 +83,10 @@
                 $('#download-svg-link').attr('download', 'template.svg');
 
                 const pdf = new jsPDF({
-                    orientation: 'landscape'
+                    unit: 'px',
+                    floatPrecision: 32,
+                    orientation: 'landscape',
+                    putOnlyUsedFonts: true,
                 });
                 pdf.addFont('Arial.ttf', 'Arial', 'Normal')
 
@@ -92,7 +95,7 @@
                     xOffset: 50,
                     yOffset: 50,
                     scale: 2.0
-                });
+                });                
 
                 // get the data URI
                 $('#download-pdf-link').attr('href', pdf.output('datauristring'));
