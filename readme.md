@@ -25,14 +25,14 @@ This tool was written to generate tag templates for import to CorelDraw and late
 
 Because of this I'm generating a PDF using [svg2pdf](https://github.com/yWorks/svg2pdf.js/tree/master) library.
 
-## dependencies
+## dependencies
 
 * https://github.com/yWorks/svg2pdf.js
 * https://github.com/yWorks/jsPDF
 * https://jquery.com/
 * http://snapsvg.io
 
-## license
+## license
 
 The MIT License (MIT)
 
