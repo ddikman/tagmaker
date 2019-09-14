@@ -160,7 +160,7 @@
       }
 
       // Read in the image file as a data URL.
-      reader.readAsText(file, 'utf-8');
+      reader.readAsText(file, 'windows-1252');
     }
 
     function handleFileSelect(evt) {
@@ -172,7 +172,9 @@
         if (f.name.endsWith('csv')) {
             console.log('reading file')
             readData(f, function(data) {
-                rows = data.trim().split('\n').map(function(row) { return row.split(';') });
+                const hasSemicolon = data.strpos(';') >= 0;
+                const seperator =  hasSemicolon ? ';' : ',';
+                rows = data.trim().split('\n').map(function(row) { return row.split(seperator) });
                 generateSvg(rows);
                 $('#done-buttons').show();
                 $('#file-input').hide();
