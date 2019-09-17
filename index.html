@@ -172,7 +172,7 @@
         if (f.name.endsWith('csv')) {
             console.log('reading file')
             readData(f, function(data) {
-                const hasSemicolon = data.strpos(';') >= 0;
+                const hasSemicolon = data.indexOf(';') >= 0;
                 const seperator =  hasSemicolon ? ';' : ',';
                 rows = data.trim().split('\n').map(function(row) { return row.split(seperator) });
                 generateSvg(rows);
