@@ -56,6 +56,9 @@
             function generateSvg(rows) {
                 $('#output').show();
                 const maxColumns = 7;
+
+                const distanceY = 60;
+                const distanceX = 230;
                 
                 let row = 0;
                 let column = 0;
@@ -65,12 +68,12 @@
                 rows.forEach(function(row) {
                     if (column == maxColumns) {
                         column = 0;
-                        offsetY = offsetY + 70;
+                        offsetY = offsetY + distanceY;
                         offsetX = 0;
                     }
                     place(row, offsetX, offsetY)
 
-                    offsetX += 240;
+                    offsetX += distanceX;
                     column += 1;
                 })
 
