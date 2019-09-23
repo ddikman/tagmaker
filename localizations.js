@@ -5,7 +5,9 @@ const locale = {
         'download-example': 'Ladda ner exempelfil',
         'upload-hint': 'Tryck här för att ladda upp data fil',
         'try-again': "Prova igen",
-        'choose-file': 'Välj fil'
+        'choose-file': 'Välj fil',
+        'upload-failed': 'Uppladdning misslyckades, endast .csv kan laddas upp',
+        'save-material': 'Spara material (mindre avstånd)'
     },
 }
 
@@ -17,6 +19,10 @@ function currentLocale() {
 
 function translationAvailable() {
     return currentLocale() !== undefined;
+}
+
+function translate(term, fallback) {
+    return translationAvailable() ? currentLocale()[term] : fallback;
 }
 
 $(document).ready(function() {

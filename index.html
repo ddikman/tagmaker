@@ -5,6 +5,7 @@
         <script src="./jspdf.min.js"></script>
         <script src="./svg2pdf.min.js"></script>
         <link rel="stylesheet" href="./tagmaker.css" />
+        <link rel="stylesheet" href="./toggle-switch.css" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
         <script src="./localizations.js"></script>
@@ -21,16 +22,17 @@
                 <div>
                     <a class="button -blue" href='test.csv' data-translate="download-example" download="example.csv">Download example file</a>
                 </div>
+                <div class="switch-container">
+                    <label class="switch">
+                        <input id="save-material" type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="switch-text" data-translate="save-material">Save material (less spacing)</span>
+                </div>
             </div>
               <div id="output" style="display: none;">
                 <svg id="svg" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
                     <g id="example">
-                        <!--
-                            Widtht: 212px
-                            Height: 42px
-                            Border rounding: ~7.5px
-                            Circles: 5px in, 5.7px?
-                        -->
                         <path stroke-width="0.04" stroke="#373535" fill="none" d="m 10,58.5758 h 211.8747 c 4.0966,0 7.4486,-3.3516 7.4486,-7.4486 v -41.7957 c 0,-4.0969 -3.352,-7.4486 -7.4486,-7.4486 H 10 c -4.0967,0 -7.4484,3.3517 -7.4484,7.4486 v 41.7957 c 0,4.097 3.3517,7.4486 7.4484,7.4486 z"></path>
                         <path stroke-width="0.04" stroke="#373535" fill="none" d="m 218.5222,36.2564 c 3.1312,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5381,-5.6693 -5.6693,-5.6693 -3.1311,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5382,5.6693 5.6693,5.6693 z"></path>
                         <path stroke-width="0.04" stroke="#373535" fill="none" d="m 15.0083,36.2564 c 3.1311,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5382,-5.6693 -5.6693,-5.6693 -3.1312,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5381,5.6693 5.6693,5.6693 z"></path>
@@ -50,147 +52,28 @@
         </div>
         </div>
 
+        <script src="./svg-generator.js"></script>
+        <script src="./file-reader.js"></script>
         <script>
-            const snap = Snap('#svg'); 
 
-            function generateSvg(rows) {
-                $('#output').show();
-                const maxColumns = 7;
-
-                const distanceY = 60;
-                const distanceX = 230;
-                
-                let row = 0;
-                let column = 0;
-                let offsetX = 0;
-                let offsetY = 0;
-                let count = 0;
-                rows.forEach(function(row) {
-                    if (column == maxColumns) {
-                        column = 0;
-                        offsetY = offsetY + distanceY;
-                        offsetX = 0;
+            $('#files').change(function(evt) {
+                handleCsvUpload(evt, function(err, rows) {
+                    if (err) {
+                        alert(translate('upload_failed', 'Upload failed, only .csv files are accepted'));
+                        console.log(err);
+                    } else {
+                        const saveMaterial = $('#save-material')[0].checked;
+                        generateSvg(rows, saveMaterial);
+                        $('#done-buttons').show();
+                        $('#file-input').hide();
                     }
-                    place(row, offsetX, offsetY)
-
-                    offsetX += distanceX;
-                    column += 1;
-                })
-
-                // remove the original one
-                Snap('#example').remove()
-
-                // scale back
-                const totalBox = snap.getBBox();
-                snap.attr({
-                    viewBox: `0 0 ${totalBox.width + 10} ${totalBox.height + 10}`
-                })
-
-                const svg = $('#svg')[0];
-                const base64 = base64EncodeUnicode(svg.outerHTML);
-                $('#download-svg-link').attr('href', "data:application/svg;base64," + base64);
-                $('#download-svg-link').attr('download', 'template.svg');
-
-                const pdf = new jsPDF({
-                    unit: 'px',
-                    floatPrecision: 32,
-                    orientation: 'landscape',
-                    putOnlyUsedFonts: true,
                 });
-                pdf.addFont('Arial.ttf', 'Arial', 'Normal')
+            });
 
-                // render the svg element
-                svg2pdf(document.getElementById('svg'), pdf, {
-                    xOffset: 50,
-                    yOffset: 50,
-                    scale: 2.0
-                });                
+            $('#try-again').click(function() {
+                window.location.reload();
+            });
 
-                // get the data URI
-                $('#download-pdf-link').attr('href', pdf.output('datauristring'));
-                $('#download-pdf-link').attr('download', 'template.pdf');
-            }
-
-            function centeredTextBox(container, rows) {
-                const lineHeight = 20;
-                const offsetY = 23;
-                rows.forEach(function(line, index) {
-                    const middle = container.getBBox().width * 0.5;
-                    const text = snap.text(middle, 0, line.trim());
-                    text.addClass('text');
-                    container.append(text);
-                    text.attr({
-                        'font-family': 'Arial',
-                        'font-size': '14pt',
-                        'font-weight': 'bold',
-                        'text-anchor': 'middle',
-                        y: offsetY + lineHeight * index
-                    });
-                });
-            }
-
-            function centerText(container, text) {
-                const bbox = container.getBBox();
-                centeredTextBox(container, text)
-            }
-
-            function place(text, x, y) {
-                const box = Snap('#example').clone();
-                box.transform(`t${x},${y}`);
-                snap.append(box);
-                centerText(box, text)
-            }
-
-            function base64EncodeUnicode(str) {
-                // First we escape the string using encodeURIComponent to get the UTF-8 encoding of the characters, 
-                // then we convert the percent encodings into raw bytes, and finally feed it to btoa() function.
-                utf8Bytes = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
-                        return String.fromCharCode('0x' + p1);
-                });
-
-                return btoa(utf8Bytes);
-            }
         </script>
-
-        <script>
-
-    function readData(file, callback) {
-    var reader = new FileReader();
-
-      // Closure to capture the file information.
-      reader.onload = function(e) {
-          callback(reader.result);
-      }
-
-      // Read in the image file as a data URL.
-      reader.readAsText(file, 'windows-1252');
-    }
-
-    function handleFileSelect(evt) {
-        var files = evt.target.files; // FileList object
-
-    // Loop through the FileList and render image files as thumbnails.
-    for (var i = 0, f; f = files[i]; i++) {
-
-        if (f.name.endsWith('csv')) {
-            console.log('reading file')
-            readData(f, function(data) {
-                const hasSemicolon = data.indexOf(';') >= 0;
-                const seperator =  hasSemicolon ? ';' : ',';
-                rows = data.trim().split('\n').map(function(row) { return row.split(seperator) });
-                generateSvg(rows);
-                $('#done-buttons').show();
-                $('#file-input').hide();
-            })
-        }
-    }
-  }
-
-  $('#try-again').click(function() {
-    window.location.reload();
-  });
-
-  document.getElementById('files').addEventListener('change', handleFileSelect, false);
-  </script>
     </body>
 </html>
