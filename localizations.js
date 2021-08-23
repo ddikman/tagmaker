@@ -7,7 +7,10 @@ const locale = {
         'try-again': "Prova igen",
         'choose-file': 'Välj fil',
         'upload-failed': 'Uppladdning misslyckades, endast .csv kan laddas upp',
-        'save-material': 'Spara material (mindre avstånd)'
+        'save-material': 'Spara material (mindre avstånd)',
+        'reset-settings': "Återställ inställningar",
+        'text-size': 'Textstorlek: ',
+        'text-offset': 'Textavstånd (uppifrån): '
     },
 }
 
