@@ -6,6 +6,7 @@
         <script src="./svg2pdf.min.js"></script>
         <link rel="stylesheet" href="./tagmaker.css" />
         <link rel="stylesheet" href="./toggle-switch.css" />
+        <link rel="stylesheet" href="./radiobutton.css" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
         <script src="./localizations.js"></script>
@@ -29,14 +30,25 @@
                     </label>
                     <span class="switch-text" data-translate="save-material">Save material (less spacing)</span>
                 </div>
+                <div class="size-container">
+                  <label><input type="radio" checked name="sizing" value="example-wide" /><span>12.7x0.32mm</span></label>
+                  <label><input type="radio" name="sizing" value="example-narrow" /><span>35x15mm</span></label>
+                </div>
             </div>
               <div id="output" style="display: none;">
                 <svg id="svg" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
-                    <g id="example">
+                    <g id="example-wide">
                         <path stroke-width="0.04" stroke="#373535" fill="none" d="m 10,58.5758 h 211.8747 c 4.0966,0 7.4486,-3.3516 7.4486,-7.4486 v -41.7957 c 0,-4.0969 -3.352,-7.4486 -7.4486,-7.4486 H 10 c -4.0967,0 -7.4484,3.3517 -7.4484,7.4486 v 41.7957 c 0,4.097 3.3517,7.4486 7.4484,7.4486 z"></path>
+                        <!-- Circles -->
                         <path stroke-width="0.04" stroke="#373535" fill="none" d="m 218.5222,36.2564 c 3.1312,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5381,-5.6693 -5.6693,-5.6693 -3.1311,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5382,5.6693 5.6693,5.6693 z"></path>
                         <path stroke-width="0.04" stroke="#373535" fill="none" d="m 15.0083,36.2564 c 3.1311,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5382,-5.6693 -5.6693,-5.6693 -3.1312,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5381,5.6693 5.6693,5.6693 z"></path>
                     </g>
+                    <g id="example-narrow">
+                      <path stroke-width="1.04" stroke="#373535" fill="none" d="m 10,58.5758 h 121.8279525 c 4.0966,0 7.4486,-3.3516 7.4486,-7.4486 v -41.7957 c 0,-4.0969 -3.352,-7.4486 -7.4486,-7.4486 H 10 c -4.0967,0 -7.4484,3.3517 -7.4484,7.4486 v 41.7957 c 0,4.097 3.3517,7.4486 7.4484,7.4486 z"></path>
+                      <!-- Circles -->
+                      <path stroke-width="1.04" stroke="#373535" fill="none" d="m 128.5222,36.2564 c 3.1312,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5381,-5.6693 -5.6693,-5.6693 -3.1311,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5382,5.6693 5.6693,5.6693 z"></path>
+                      <path stroke-width="1.04" stroke="#373535" fill="none" d="m 15.0083,36.2564 c 3.1311,0 5.6693,-2.5384 5.6693,-5.6693 0,-3.1308 -2.5382,-5.6693 -5.6693,-5.6693 -3.1312,0 -5.6693,2.5385 -5.6693,5.6693 0,3.1309 2.5381,5.6693 5.6693,5.6693 z"></path>
+                  </g>
             </svg>
         </div>
 
@@ -56,6 +68,22 @@
         <script src="./file-reader.js"></script>
         <script>
 
+          $(document).ready(function() {
+            try {
+              const saveMaterial = localStorage.getItem('save-material') == 'true'
+              if (saveMaterial) {
+                $('#save-material').attr('checked', 'checked')
+              }
+
+              const template = localStorage.getItem('template')
+              if (template) {
+                $('input:radio[name=sizing]').val([template]);
+              }
+            } catch (err) {
+              console.log("Failed to get any previous values for template etc, resetting to defaults.")
+            }
+          })
+
             $('#files').change(function(evt) {
                 handleCsvUpload(evt, function(err, rows) {
                     if (err) {
@@ -63,7 +91,10 @@
                         console.log(err);
                     } else {
                         const saveMaterial = $('#save-material')[0].checked;
-                        generateSvg(rows, saveMaterial);
+                        const template = $("input[name='sizing']:checked").val();
+                        localStorage.setItem('save-material', saveMaterial ? 'true' : 'false')
+                        localStorage.setItem('template', template)
+                        generateSvg(rows, saveMaterial, template);
                         $('#done-buttons').show();
                         $('#file-input').hide();
                     }

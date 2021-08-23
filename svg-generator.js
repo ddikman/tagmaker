@@ -1,11 +1,21 @@
 const snap = Snap('#svg');
 
-function generateSvg(rows, saveMaterial) {
+function generateSvg(rows, saveMaterial, template) {
     $('#output').show();
     const maxColumns = 7;
 
-    const distanceY = saveMaterial ? 60 : 70;
-    const distanceX = saveMaterial ? 230 : 240;
+    console.log(`Generating ${rows.length} entries with template ${template}, saving material = ${saveMaterial}`);
+    // const distanceY = saveMaterial ? 60 : 70;
+    // const distanceX = saveMaterial ? 230 : 240;
+
+    const { width, height } = Snap(`#${template}`).getBBox();
+    const size = { width, height };
+    console.log(`sizing:`);
+    console.log(JSON.stringify(size))
+
+    const padding = saveMaterial ? 4 : 14;
+    const distanceX = size.width + padding;
+    const distanceY = size.height + padding;
 
     let column = 0;
     let offsetX = 0;
@@ -16,14 +26,15 @@ function generateSvg(rows, saveMaterial) {
             offsetY = offsetY + distanceY;
             offsetX = 0;
         }
-        place(row, offsetX, offsetY)
+        place(row, offsetX, offsetY, template)
 
         offsetX += distanceX;
         column += 1;
     })
 
     // remove the original one
-    Snap('#example').remove()
+    Snap('#example-wide').remove()
+    Snap('#example-narrow').remove()
 
     // scale back
     const totalBox = snap.getBBox();
@@ -79,15 +90,15 @@ function centerText(container, text) {
     centeredTextBox(container, text)
 }
 
-function place(text, x, y) {
-    const box = Snap('#example').clone();
+function place(text, x, y, template) {
+    const box = Snap(`#${template}`).clone();
     box.transform(`t${x},${y}`);
     snap.append(box);
     centerText(box, text)
 }
 
 function base64EncodeUnicode(str) {
-    // First we escape the string using encodeURIComponent to get the UTF-8 encoding of the characters, 
+    // First we escape the string using encodeURIComponent to get the UTF-8 encoding of the characters,
     // then we convert the percent encodings into raw bytes, and finally feed it to btoa() function.
     utf8Bytes = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
         return String.fromCharCode('0x' + p1);

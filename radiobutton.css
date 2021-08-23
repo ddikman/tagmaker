@@ -1,0 +1,19 @@
+.size-container {
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.size-container label {
+  display: flex;
+  align-items: center;
+  margin: 0px 16px;
+}
+
+.size-container input[type="radio"] {
+  width: 26px;
+  height: 26px;
+  color: #3dd28d;
+}
