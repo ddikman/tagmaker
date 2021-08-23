@@ -1,17 +1,16 @@
 const snap = Snap('#svg');
 
-function generateSvg(rows, saveMaterial, template) {
+function generateSvg(rows, saveMaterial, template, styles) {
     $('#output').show();
     const maxColumns = 7;
 
+    const finalStyle = getStyle(styles || {})
+
     console.log(`Generating ${rows.length} entries with template ${template}, saving material = ${saveMaterial}`);
-    // const distanceY = saveMaterial ? 60 : 70;
-    // const distanceX = saveMaterial ? 230 : 240;
+    console.log(`Using styles: ${JSON.stringify(finalStyle)}`)
 
     const { width, height } = Snap(`#${template}`).getBBox();
     const size = { width, height };
-    console.log(`sizing:`);
-    console.log(JSON.stringify(size))
 
     const padding = saveMaterial ? 4 : 14;
     const distanceX = size.width + padding;
@@ -26,7 +25,7 @@ function generateSvg(rows, saveMaterial, template) {
             offsetY = offsetY + distanceY;
             offsetX = 0;
         }
-        place(row, offsetX, offsetY, template)
+        place(row, offsetX, offsetY, template, finalStyle)
 
         offsetX += distanceX;
         column += 1;
@@ -67,9 +66,16 @@ function generateSvg(rows, saveMaterial, template) {
     $('#download-pdf-link').attr('download', 'template.pdf');
 }
 
-function centeredTextBox(container, rows) {
+function getStyle(style) {
+  return {
+    textSize: style.textSize || 14,
+    textOffset: style.textOffset || 23
+  }
+}
+
+function centeredTextBox(container, rows, style) {
     const lineHeight = 20;
-    const offsetY = 23;
+    const offsetY = style.textOffset;
     rows.forEach(function (line, index) {
         const middle = container.getBBox().width * 0.5;
         const text = snap.text(middle, 0, line.trim());
@@ -77,7 +83,7 @@ function centeredTextBox(container, rows) {
         container.append(text);
         text.attr({
             'font-family': 'Arial',
-            'font-size': '14pt',
+            'font-size': `${style.textSize}pt`,
             'font-weight': 'bold',
             'text-anchor': 'middle',
             y: offsetY + lineHeight * index
@@ -85,16 +91,16 @@ function centeredTextBox(container, rows) {
     });
 }
 
-function centerText(container, text) {
+function centerText(container, text, style) {
     const bbox = container.getBBox();
-    centeredTextBox(container, text)
+    centeredTextBox(container, text, style)
 }
 
-function place(text, x, y, template) {
+function place(text, x, y, template, style) {
     const box = Snap(`#${template}`).clone();
     box.transform(`t${x},${y}`);
     snap.append(box);
-    centerText(box, text)
+    centerText(box, text, style)
 }
 
 function base64EncodeUnicode(str) {

@@ -13,8 +13,32 @@
     </head>
     <body>
             <div id="file-input">
+                <div class="size-container input-row">
+                  <label><input type="radio" checked name="sizing" value="example-wide" /><span>80x20mm</span></label>
+                  <label><input type="radio" name="sizing" value="example-narrow" /><span>35x15mm</span></label>
+                </div>
+                <div class="switch-container input-row">
+                  <label class="switch">
+                      <input id="save-material" type="checkbox">
+                      <span class="slider round"></span>
+                  </label>
+                  <span class="switch-text" data-translate="save-material">Save material (less spacing)</span>
+                </div>
+                <div class="input-row">
+                  <label>
+                    <span>Text size: </span>
+                    <input id="text-size" type="number" value="14" placeholder="Text size" maxlength="3" />
+                  </label>
+                  <label>
+                    <span>Text offset (from top):</span>
+                    <input id="text-offset" type="number" value="23" placeholder="Text offset" maxlength="3" />
+                  </label>
+                </div>
+
+                <hr />
+
                 <div>
-                        <label data-translate="upload-hint">Press to upload data file</label>
+                  <label data-translate="upload-hint">Press to upload data file</label>
                 </div>
                 <div style="margin-top: 20px">
                     <label for="files" class="button -green" data-translate="choose-file">Choose file</label>
@@ -23,17 +47,10 @@
                 <div>
                     <a class="button -blue" href='test.csv' data-translate="download-example" download="example.csv">Download example file</a>
                 </div>
-                <div class="switch-container">
-                    <label class="switch">
-                        <input id="save-material" type="checkbox">
-                        <span class="slider round"></span>
-                    </label>
-                    <span class="switch-text" data-translate="save-material">Save material (less spacing)</span>
-                </div>
-                <div class="size-container">
-                  <label><input type="radio" checked name="sizing" value="example-wide" /><span>80x20mm</span></label>
-                  <label><input type="radio" name="sizing" value="example-narrow" /><span>35x15mm</span></label>
-                </div>
+
+                <hr />
+
+                <a class="button -salmon" href="#" id="reset-settings">Reset settings</a>
             </div>
               <div id="output" style="display: none;">
                 <svg id="svg" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
@@ -70,17 +87,20 @@
 
           $(document).ready(function() {
             try {
-              const saveMaterial = localStorage.getItem('save-material') == 'true'
-              if (saveMaterial) {
+              const settingsJson = localStorage.getItem('settings')
+              if (!settingsJson) return;
+
+              const settings = JSON.parse(settingsJson)
+
+              if (settings.saveMaterial) {
                 $('#save-material').attr('checked', 'checked')
               }
-
-              const template = localStorage.getItem('template')
-              if (template) {
-                $('input:radio[name=sizing]').val([template]);
-              }
+              $('input:radio[name=sizing]').val([settings.template]);
+              $('#text-size').val(settings.style.textSize);
+              $('#text-offset').val(settings.style.textOffset);
             } catch (err) {
               console.log("Failed to get any previous values for template etc, resetting to defaults.")
+              console.error(err)
             }
           })
 
@@ -90,11 +110,19 @@
                         alert(translate('upload_failed', 'Upload failed, only .csv files are accepted'));
                         console.log(err);
                     } else {
+                        const style = {
+                          textOffset: parseInt($('#text-offset').val()),
+                          textSize: parseInt($('#text-size').val())
+                        }
                         const saveMaterial = $('#save-material')[0].checked;
                         const template = $("input[name='sizing']:checked").val();
-                        localStorage.setItem('save-material', saveMaterial ? 'true' : 'false')
-                        localStorage.setItem('template', template)
-                        generateSvg(rows, saveMaterial, template);
+                        const settings = {
+                          template,
+                          saveMaterial,
+                          style
+                        }
+                        localStorage.setItem('settings', JSON.stringify(settings))
+                        generateSvg(rows, saveMaterial, template, style);
                         $('#done-buttons').show();
                         $('#file-input').hide();
                     }
@@ -104,6 +132,11 @@
             $('#try-again').click(function() {
                 window.location.reload();
             });
+
+            $('#reset-settings').click(function() {
+              localStorage.removeItem('settings');
+              window.location.reload();
+            })
 
         </script>
     </body>
